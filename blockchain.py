@@ -22,6 +22,15 @@ class BlockChain:
 		self.chain.append(new_block)
 		return new_block
 
+	def info(self,assetid,company=None):
+		if assetid not in self.data:
+			return "no asset with this id"
+		if not company:
+			return self.data[assetid]
+		if company in self.data[assetid]: 
+			return  self.data[assetid][company]
+		return "not owned"
+
 	def update(self):
 		d = self.uncommited_transactions[-1]
 		self.data[d['assetid']][d["receiver"]] =  "l"

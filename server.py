@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from blockchain import BlockChain
 
 web_app = Flask(__name__)
@@ -6,6 +6,14 @@ web_app = Flask(__name__)
 blockchain = BlockChain()
 
 node_address = None
+
+@web_app.route("/")
+def main():
+    return render_template('index.html')
+
+@web_app.route("/showinfo", methods=['GET'])
+def showinfo():
+	return str(blockchain.info(request.args.get('inputAssetId'),request.args.get('inputCompanyId',None))) +"/n here 'o' means owner and 'l' means its leased"
 
 @web_app.route('/post-transaction', methods=['POST'])
 def post_transaction():
