@@ -7,7 +7,7 @@ class BlockChain:
 	def __init__(self):
 		self.chain=[]
 		import json
-		data = json.load(open('data.json'))
+		data = json.load(open('asset.json'))
 		self.data = data
 		self.uncommited_transactions = []
 		self.nodes = set()	
