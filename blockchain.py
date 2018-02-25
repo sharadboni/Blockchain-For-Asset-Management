@@ -6,6 +6,9 @@ class BlockChain:
 
 	def __init__(self):
 		self.chain=[]
+		import json
+		data = json.load(open('data.json'))
+		self.data = data
 		self.uncommited_transactions = []
 		self.nodes = set()	
 		self.create_genesis_block()
@@ -14,14 +17,18 @@ class BlockChain:
 		return self.create_new_block("0",0)
 	
 	def create_new_block(self,prev_hash,proof):
-		new_block = Block(prev_hash,self.uncommited_transactions,proof,len(self.chain))
+		new_block = Block(prev_hash,self.uncommited_transactions,proof,len(self.chain),self.data)
 		self.reset_transactions()
 		self.chain.append(new_block)
 		return new_block
 
-	def create_new_transaction(self,sender,receiver,amount):
-		self.uncommited_transactions.append({ "sender": sender, "receiver": receiver, "amount": amount})
-		#return True
+	def update(self):
+		d = self.uncommited_transactions[-1]
+		self.data[d['assetid']][d["receiver"]] =  "l"
+
+	def create_new_transaction(self,sender,receiver):
+		self.uncommited_transactions.append({ "sender": sender, "receiver": receiver, 'assetid': assetid})
+		self.update()
 
 	def last_block(self):
 		return self.chain[-1]
@@ -48,7 +55,6 @@ class BlockChain:
 		return True
 
     	def mine_block(self, miner_address):
-        	self.create_new_transaction(sender=None, receiver=miner_address, amount=1)
         	prev_block = self.last_block()
         	prev_proof = prev_block.proof
         	proof = self.do_proof_of_work(prev_proof)
@@ -68,5 +74,4 @@ class BlockChain:
 	@staticmethod
 	def convert_from_json_to_block(json_data):
 		return Block(json_data["prev_hash"],json_data["transactions"],json_data["proof"],json_data["index"])
-		#return True
 

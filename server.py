@@ -13,8 +13,7 @@ def post_transaction():
     Input:
     {
         "sender": "address_1"
-        "receiver": "address_2",
-        "amount": 3
+        "receiver": "address_2"
     }
     """
     transaction_data = request.get_json()
